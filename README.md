@@ -19,9 +19,14 @@
   The code should be compiled and deployable in minikube
 
 ### PREREQUISITES  
-* docker, minikube, bazel, go, kafka, patroni
+* docker, minikube, bazel, go, kafka, postgres/patroni
 * https://minikube.sigs.k8s.io/docs/start/
 * https://helm.sh/docs/intro/install/
+* postgres and kafka installation
+  - helm repo add bitnami https://charts.bitnami.com/bitnami
+  - helm install db bitnami/postgresql
+  - helm install messaging bitnami/kafka
+    
 
 ### COMMANDS
 

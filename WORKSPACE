@@ -38,3 +38,43 @@ http_archive(
         "https://github.com/bazelbuild/rules_go/releases/download/v0.22.2/rules_go-v0.22.2.tar.gz",
     ],
 )
+
+#######  @bazel_gazelle package and dependencies
+
+http_archive(
+    name = "bazel_gazelle",
+    url = "https://github.com/bazelbuild/bazel-gazelle/releases/download/0.8/bazel-gazelle-0.8.tar.gz",
+    sha256 = "e3dadf036c769d1f40603b86ae1f0f90d11837116022d9b06e4cd88cae786676",
+)
+
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
+
+gazelle_dependencies()
+
+go_repository(
+    name = "com_github_segmentio_kafka_go",
+    importpath = "github.com/segmentio/kafka-go",
+    sum = "h1:/LwffTZgFnfjgkUu1ZzHTwJJ39vW77wwUA0J6ftBbGw=",
+    version = "v0.4.18",
+)
+
+go_repository(
+    name = "com_github_golang_snappy",
+    importpath = "github.com/golang/snappy",
+    sum = "h1:yAGX7huGHXlcLOEtBnF4w7FQwA26wojNCwOYAEhLjQM=",
+    version = "v0.0.4",
+)
+
+go_repository(
+    name = "com_github_klauspost_compress",
+    importpath = "github.com/klauspost/compress",
+    sum = "h1:9O69jUPDcsT9fEm74W92rZL9FQY7rCdaXVneq+yyzl4=",
+    version = "v1.13.5",
+)
+
+go_repository(
+    name = "com_github_pierrec_lz4",
+    importpath = "github.com/pierrec/lz4",
+    sum = "h1:9UY3+iC23yxF0UfGaYrGplQ+79Rg+h/q9FV9ix19jjM=",
+    version = "v2.6.1+incompatible",
+)

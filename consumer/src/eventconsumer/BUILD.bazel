@@ -5,13 +5,13 @@ load("@io_bazel_rules_docker//container:container.bzl", "container_push")
 go_library(
     name = "go_default_library",
     srcs = ["main.go"],
-    importpath = "eventgenerator/producer/src/eventproducer",
+    importpath = "eventgenerator/consumer/src/eventconsumer",
     visibility = ["//visibility:private"],
     deps = ["@com_github_segmentio_kafka_go//:go_default_library"],
 )
 
 go_binary(
-    name = "eventproducer",
+    name = "eventconsumer",
     embed = [":go_default_library"],
     visibility = ["//visibility:public"],
 )
@@ -19,6 +19,6 @@ go_binary(
 container_image(
     name = "latest",
     base = "@alpine_linux_amd64//image",
-    entrypoint = ["/eventproducer"],
-    files = [":eventproducer"],
+    entrypoint = ["/eventconsumer"],
+    files = [":eventconsumer"],
 )
