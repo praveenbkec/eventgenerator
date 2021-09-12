@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/segmentio/kafka-go"
 	"log"
 	"time"
@@ -34,25 +35,25 @@ func produceEventsNew() {
 			Name:  "praveen",
 			Dept:  "IT",
 			EmpID: "12345",
-			Time:  time.Now().Add(time.Second).String(),
+			Time:  time.Now().Format(time.RFC850),
 		},
 		{
 			Name:  "rajesh",
 			Dept:  "TEST",
 			EmpID: "23456",
-			Time:  time.Now().Add(time.Second).String(),
+			Time:  time.Now().Format(time.RFC850),
 		},
 		{
 			Name:  "suresh",
 			Dept:  "TEST",
 			EmpID: "34567",
-			Time:  time.Now().Add(time.Second).String(),
+			Time:  time.Now().Format(time.RFC850),
 		},
 		{
 			Name:  "vinaya",
 			Dept:  "IT",
 			EmpID: "45678",
-			Time:  time.Now().Add(time.Second).String(),
+			Time:  time.Now().Format(time.RFC850),
 		},
 	}
 	w := kafka.Writer{
@@ -61,7 +62,8 @@ func produceEventsNew() {
 		Balancer: &kafka.LeastBytes{},
 	}
 
-	for i := 0; i < len(events); i++ {
+	i := 3
+	for i>=0 {
 		event := events[i]
 		eventJson, errMarshall := json.Marshal(event)
 		if errMarshall != nil {
@@ -77,6 +79,12 @@ func produceEventsNew() {
 			log.Fatal("failed to write messages:", err)
 		}
 		time.Sleep(30 * time.Second)
+		if i ==0 {
+			fmt.Println("************** Repeating count ****************")
+			i = 3
+		} else {
+			i--
+		}
 	}
 	if err := w.Close(); err != nil {
 		log.Fatal("failed to close writer:", err)
