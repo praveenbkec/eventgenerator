@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option go_package = "consumer/src/eventconsumer/proto";
+
+package consumer;
+
+import "google/api/annotations.proto";
+import "google/protobuf/wrappers.proto";
+
+service EventGeneratorSvc {
+
+  rpc getEvent(GetEventRequest) returns (GetEventResponse) {
+    option (google.api.http).get = "/eventgenerator/event/{EmpID}";
+  }
+
+  rpc ListEvent(ListEventRequest) returns (ListEventResponse) {
+    option (google.api.http) = { get: "/eventgenerator/event" };
+  }
+
+}
+
+message GetEventRequest{
+  string EmpID = 1;
+  string Name = 2;
+  string Dept = 3;
+  string Time = 4;
+
+}
+
+message GetEventResponse {
+
+}
+
+message ListEventRequest{
+
+}
+
+message ListEventResponse {
+
+}
