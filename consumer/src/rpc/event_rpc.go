@@ -1,6 +1,9 @@
 package rpc
 
-pb "github.com/rephus/grpc-gateway-example/template"
+import (
+	pb "github.com/praveenbkec/eventgenerator/consumer/proto"
+	//pb "consumer/src/eventconsumer/proto"
+)
 
 type server struct {
 	//GetEventRequest
