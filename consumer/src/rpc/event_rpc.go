@@ -25,10 +25,25 @@ func(s *server) ListEvent(ctx context.Context, req *pb.ListEventRequest) (*pb.Li
 
 
 func RegisterGrpcServer() {
-	listen, err := net.Listen("tcp", ":10000")
+	fmt.Println("********** RegisterGrpcServer ******** ")
+	addr := ":10000"
+	listen, err := net.Listen("tcp", addr)
 	if err != nil {
 		log.Fatal("Unable to listen on port 10000", listen)
 	}
 	gRpcSvr := grpc.NewServer()
+	fmt.Println("********** RegisterEventGeneratorSvcServer ******** ")
 	pb.RegisterEventGeneratorSvcServer(gRpcSvr, &server{})
+	// Register reflection service on gRPC server.
+	//reflection.Register(gRpcSvr)
+	fmt.Println("********** GrpcServer gRpcSvr.Serve before ******** ")
+	//if err := gRpcSvr.Serve(listen); err != nil {
+	//	log.Fatalf("failed to serve: %v", err)
+	//}
+	// Serve gRPC Server
+	fmt.Println("Serving gRPC on https://", addr)
+	go func() {
+		log.Fatal(gRpcSvr.Serve(listen))
+	}()
+	fmt.Println("********** GrpcServer Listening on 10000 ******** ")
 }

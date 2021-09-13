@@ -43,6 +43,7 @@ const (
 
 
 func ConsumeEvents() {
+	fmt.Println("********* Starting Consumer ************")
 	r := kafka.NewReader(kafka.ReaderConfig{
 		Brokers:   []string{brokerAddress},
 		Topic:     topic,
