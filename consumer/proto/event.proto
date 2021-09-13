@@ -9,7 +9,7 @@ import "google/protobuf/wrappers.proto";
 
 service EventGeneratorSvc {
 
-  rpc getEvent(GetEventRequest) returns (GetEventResponse) {
+  rpc GetEvent(GetEventRequest) returns (GetEventResponse) {
     option (google.api.http).get = "/eventgenerator/event/{EmpID}";
   }
 
@@ -28,7 +28,7 @@ message GetEventRequest{
 }
 
 message GetEventResponse {
-
+  string status = 1;
 }
 
 message ListEventRequest{
@@ -36,5 +36,5 @@ message ListEventRequest{
 }
 
 message ListEventResponse {
-
+  string status = 1;
 }

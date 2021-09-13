@@ -2,116 +2,95 @@ package main
 
 import (
 	"context"
-	"database/sql"
-	"encoding/json"
+	"flag"
 	"fmt"
+	pb "github.com/praveenbkec/eventgenerator/consumer/proto"
+
+	//"github.com/golang/glog"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	_ "github.com/lib/pq"
-	"github.com/segmentio/kafka-go"
-	"log"
+	"github.com/praveenbkec/eventgenerator/consumer/src/rpc"
+	"google.golang.org/grpc"
+	"net/http"
 )
 
 const (
-	brokerAddress = "messaging-kafka.default.svc.cluster.local:9092"
-	topic = "message-event"
-	partion = 0
-	batchSize = int(10e6)
-	createTableQuery = "CREATE TABLE IF NOT EXISTS EVENTS(EmpID varchar(10), Name varchar(50), Dept varchar(10), Time varchar(100));"
-	inserteQuery = "INSERT INTO EVENTS(EmpID, Name, Dept, Time) values($1, $2, $3, $4);"
+	grpcPort = "10000"
+	serverAddress = ":8080"
 )
 
-var con *sql.DB
+var (
+	getEndpoint  = flag.String("get", "localhost:"+grpcPort, "endpoint of YourService")
+	postEndpoint = flag.String("post", "localhost:"+grpcPort, "endpoint of YourService")
+
+	swaggerDir = flag.String("swagger_dir", "template", "path to the directory which contains swagger definitions")
+)
+
 func init() {
-	con = getDBConnection()
-	createTable(con)
+	rpc.RegisterGrpcServer()
 }
 
 func main() {
-	consumeEventsNew()
+
+	fmt.Println("getEndpoint"+*getEndpoint)
+	go ConsumeEvents()
+	RunGrpcGateway(serverAddress)
 }
 
-type Event struct {
-	Name string
-	Dept string
-	EmpID string
-	Time string
-}
+func RunGrpcGateway(address string, opts ...runtime.ServeMuxOption) error {
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
 
-const (
-	host     = "db-postgresql.default.svc.cluster.local"
-	port     = 5432
-	user     = "admin"
-	password = "admin"
-	dbname   = "event_db"
-)
-
-
-
-func consumeEventsNew() {
-	r := kafka.NewReader(kafka.ReaderConfig{
-		Brokers:   []string{brokerAddress},
-		Topic:     topic,
-		Partition: partion,
-		MinBytes:  batchSize,
-		MaxBytes:  batchSize,
-	})
-
-	for {
-		msg, err := r.ReadMessage(context.Background())
-		if err != nil {
-			log.Fatal("unable to read message ", err)
-			//break
-		}
-		fmt.Println("\n ===================================== Event received ==========================================")
-		fmt.Println(""+string(msg.Key)+ " : "+string(msg.Value))
-		//var event map[string] interface{}
-		//eventJson := json.Unmarshal(msg.Value, &event)
-		//fmt.Println("eventJson",eventJson)
-		eventObj:= &Event{}
-		json.Unmarshal(msg.Value, eventObj)
-		fmt.Println("Name:"+eventObj.Name+", Dept:"+eventObj.Dept+", EmpID:"+eventObj.EmpID+", Time:"+eventObj.Time)
-		writeEvent(eventObj, con)
-	}
-
-	//errC := r.Close()
-	//if errC != nil {
-	//	log.Fatal("unable to close reader ", errC)
-	//}
-}
-
-func createTable(db *sql.DB) {
-	_, e := db.Exec(createTableQuery)
-	if e != nil {
-		log.Fatal("Unable to create database table ", e)
-	}
-}
-
-func writeEvent(event *Event, db *sql.DB) {
-	fmt.Println("=================== writeEvent ==================")
-	fmt.Println(event)
-	insertStmt := `insert into "events"("empid", "name", "dept", "time") values($1, $2, $3, $4)`
-	_, e := db.Exec(insertStmt, event.EmpID, event.Name, event.Dept, event.Time)
-	if e != nil {
-		log.Fatal("DB error during write event")
-		log.Fatal(e)
-	}
-
-}
-
-func getDBConnection() *sql.DB {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
+	mux := http.NewServeMux()
+	gw, err := newGateway(ctx, opts...)
 	if err != nil {
-		panic(err)
+		return err
 	}
-	//defer db.Close()
-	err = db.Ping()
+	mux.Handle("/", gw)
+	//return http.ListenAndServe(address, allowCORS(mux))
+	return http.ListenAndServe(address, nil)
+}
+
+func newGateway(ctx context.Context, opts ...runtime.ServeMuxOption) (http.Handler, error) {
+	mux := runtime.NewServeMux(opts...)
+	dialOpts := []grpc.DialOption{grpc.WithInsecure()}
+	err := pb.RegisterEventGeneratorSvcHandlerFromEndpoint(ctx, mux, *getEndpoint, dialOpts)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	fmt.Println("Successfully connected to db!")
-	return db
+	err = pb.RegisterEventGeneratorSvcHandlerFromEndpoint(ctx, mux, *postEndpoint, dialOpts)
+	if err != nil {
+		return nil, err
+	}
+
+	return mux, nil
 }
+
+// allowCORS allows Cross Origin Resoruce Sharing from any origin.
+// Don't do this without consideration in production systems.
+//func allowCORS(h http.Handler) http.Handler {
+//	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+//		if origin := r.Header.Get("Origin"); origin != "" {
+//			w.Header().Set("Access-Control-Allow-Origin", origin)
+//			if r.Method == "OPTIONS" && r.Header.Get("Access-Control-Request-Method") != "" {
+//				preflightHandler(w, r)
+//				return
+//			}
+//		}
+//		h.ServeHTTP(w, r)
+//	})
+//}
+//
+//func preflightHandler(w http.ResponseWriter, r *http.Request) {
+//	headers := []string{"Content-Type", "Accept"}
+//	w.Header().Set("Access-Control-Allow-Headers", strings.Join(headers, ","))
+//	methods := []string{"GET", "HEAD", "POST", "PUT", "DELETE"}
+//	w.Header().Set("Access-Control-Allow-Methods", strings.Join(methods, ","))
+//	//glog.Infof("preflight request for %s", r.URL.Path)
+//	fmt.Println("preflight request for %s", r.URL.Path)
+//	return
+//}
+
 

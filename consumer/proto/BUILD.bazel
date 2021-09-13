@@ -2,13 +2,6 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 
 
-go_library(
-    name = "go_default_library",
-    embed = [":proto_go_proto"],
-    importpath = "consumer/src/eventconsumer/proto",
-    visibility = ["//visibility:public"],
-)
-
 proto_library(
     name = "proto_proto",
     srcs = ["event.proto"],

@@ -2,17 +2,21 @@ load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("@io_bazel_rules_docker//container:container.bzl", "container_push")
 
-#gazelle:ignore
 go_library(
     name = "go_default_library",
-    srcs = ["main.go"],
-    importpath = "eventgenerator/consumer/src/eventconsumer",
+    srcs = [
+        "event_listener.go",
+        "main.go",
+    ],
+    importpath = "github.com/praveenbkec/eventgenerator/consumer/src/eventconsumer",
     visibility = ["//visibility:private"],
     deps = [
-        "@com_github_lib_pq//:go_default_library",
-        "@com_github_segmentio_kafka_go//:go_default_library",
         "//consumer/src/rpc:go_default_library",
-        "//consumer/proto:go_default_library",
+        "@com_github_grpc_ecosystem_grpc_gateway//runtime:go_default_library",
+        "@com_github_lib_pq//:go_default_library",
+        "//consumer/proto:proto_go_proto",
+        "@com_github_segmentio_kafka_go//:go_default_library",
+        "@org_golang_google_grpc//:go_default_library",
     ],
 )
 

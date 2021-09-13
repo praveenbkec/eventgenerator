@@ -1,7 +1,5 @@
 load("@bazel_gazelle//:def.bzl", "gazelle")
 
-gazelle(
-    name = "gazelle",
-    # you project name here!
-    prefix = "eventgenerator",
-)
+# gazelle:prefix github.com/praveenbkec/eventgenerator
+
+gazelle(name = "gazelle")
