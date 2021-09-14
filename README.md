@@ -78,6 +78,10 @@ kmpraveen@kmpraveen-mbp eventgenerator % kubectl logs -f eventconsumer-6c576874-
 Event : {"Name":"praveen","Dept":"IT","EmpID":"12345","Time":"2021-09-11 18:53:30.0136598 +0000 UTC m=+1.003192301"}
 ```
 
+9. Generate Swagger API using commad
+```bigquery
+bazel build --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 consumer/proto:event_swagger
+```
 
 ### COMMANDS
 
