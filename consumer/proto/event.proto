@@ -9,36 +9,54 @@ import "google/protobuf/wrappers.proto";
 
 service EventGeneratorSvc {
 
+  // GetEvent
+  //
+  // This rpc is used to get event by empid
   rpc GetEvent(GetEventRequest) returns (GetEventResponse) {
     option (google.api.http).get = "/eventgenerator/event/{EmpID}";
   }
 
+  // ListEvent
+  //
+  // This rpc will list all events from database.
   rpc ListEvent(ListEventRequest) returns (ListEventResponse) {
     option (google.api.http) = { get: "/eventgenerator/event" };
   }
 
 }
-
+// Request for Get Event
 message GetEventRequest{
+  // Employee ID
   string EmpID = 1;
 }
 
+// Event Request
 message Event{
+  // Employee ID
   string EmpID = 1;
+  // Employee Name
   string Name = 2;
+  // Employee Department
   string Dept = 3;
+  // Last Access Time
   string Time = 4;
 }
 
+// Get Event Response
 message GetEventResponse {
+  // Event
   Event event  = 1;
+  // status
   string status = 2;
 }
 
+// List Event Request
 message ListEventRequest{
 
 }
 
+// List Event response
 message ListEventResponse {
+  // Event
   repeated Event events = 1;
 }

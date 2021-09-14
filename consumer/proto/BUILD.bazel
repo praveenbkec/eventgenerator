@@ -1,5 +1,6 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+load("@com_github_grpc_ecosystem_grpc_gateway//protoc-gen-swagger:defs.bzl", "protoc_gen_swagger")
 
 proto_library(
     name = "proto_proto",
@@ -21,4 +22,9 @@ go_proto_library(
     deps = ["@go_googleapis//google/api:annotations_go_proto"],
 )
 
-
+protoc_gen_swagger(
+    name = "event_swagger",
+    proto = ":proto_proto",
+    single_output = True,  # Outputs a single swagger.json file.
+    json_names_for_fields = True,
+)

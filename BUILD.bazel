@@ -1,5 +1,19 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 load("@bazel_gazelle//:def.bzl", "gazelle")
 
 # gazelle:prefix github.com/praveenbkec/eventgenerator
 
 gazelle(name = "gazelle")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["test.go"],
+    importpath = "github.com/praveenbkec/eventgenerator",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "eventgenerator",
+    embed = [":go_default_library"],
+    visibility = ["//visibility:public"],
+)

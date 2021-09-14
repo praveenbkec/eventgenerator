@@ -1,0 +1,156 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "consumer/proto/event.proto",
+    "version": "version not set"
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/eventgenerator/event": {
+      "get": {
+        "summary": "ListEvent",
+        "description": "This rpc will list all events from database.",
+        "operationId": "EventGeneratorSvc_ListEvent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/consumerListEventResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "tags": [
+          "EventGeneratorSvc"
+        ]
+      }
+    },
+    "/eventgenerator/event/{EmpID}": {
+      "get": {
+        "summary": "GetEvent",
+        "description": "This rpc is used to get event by empid",
+        "operationId": "EventGeneratorSvc_GetEvent",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/consumerGetEventResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "EmpID",
+            "description": "Employee ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "EventGeneratorSvc"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "consumerEvent": {
+      "type": "object",
+      "properties": {
+        "EmpID": {
+          "type": "string",
+          "title": "Employee ID"
+        },
+        "Name": {
+          "type": "string",
+          "title": "Employee Name"
+        },
+        "Dept": {
+          "type": "string",
+          "title": "Employee Department"
+        },
+        "Time": {
+          "type": "string",
+          "title": "Last Access Time"
+        }
+      },
+      "title": "Event Request"
+    },
+    "consumerGetEventResponse": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "$ref": "#/definitions/consumerEvent",
+          "title": "Event"
+        },
+        "status": {
+          "type": "string",
+          "title": "status"
+        }
+      },
+      "title": "Get Event Response"
+    },
+    "consumerListEventResponse": {
+      "type": "object",
+      "properties": {
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/consumerEvent"
+          },
+          "title": "Event"
+        }
+      },
+      "title": "List Event response"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "typeUrl": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "runtimeError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
