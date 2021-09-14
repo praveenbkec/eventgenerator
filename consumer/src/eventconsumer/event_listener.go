@@ -45,8 +45,8 @@ func processEvent(msg kafka.Message) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(eventFromDb, " eventFromDb")
-	if eventFromDb != nil {
+	fmt.Println(" eventFromDb", eventFromDb)
+	if eventFromDb.EmpID != "" {
 		fmt.Println("==== Update Event call ===== ")
 		eventMgmt.UpdateEvent(ctx, eventObj)
 	} else {

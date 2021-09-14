@@ -6,8 +6,6 @@ import (
 	"fmt"
 	pb "github.com/praveenbkec/eventgenerator/consumer/proto"
 	"github.com/praveenbkec/eventgenerator/consumer/src/eventconsumer"
-	"strings"
-
 	//"github.com/golang/glog"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	_ "github.com/lib/pq"
@@ -34,9 +32,8 @@ func init() {
 
 func main() {
 	fmt.Println("getEndpoint"+*getEndpoint)
-
-	RunGrpcGateway(serverAddress)
 	go eventconsumer.ConsumeEvents()
+	RunGrpcGateway(serverAddress)
 }
 
 func RunGrpcGateway(address string, opts ...runtime.ServeMuxOption) error {
@@ -51,8 +48,8 @@ func RunGrpcGateway(address string, opts ...runtime.ServeMuxOption) error {
 		return err
 	}
 	mux.Handle("/", gw)
-	return http.ListenAndServe(address, allowCORS(mux))
-	//return http.ListenAndServe(address, mux)
+	//return http.ListenAndServe(address, allowCORS(mux))
+	return http.ListenAndServe(address, mux)
 }
 //TODO Login interceptor example
 func newGateway(ctx context.Context, opts ...runtime.ServeMuxOption) (http.Handler, error) {
@@ -77,27 +74,27 @@ func newGateway(ctx context.Context, opts ...runtime.ServeMuxOption) (http.Handl
 //TODO check whether required
 //allowCORS allows Cross Origin Resoruce Sharing from any origin.
 //Don't do this without consideration in production systems.
-func allowCORS(h http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if origin := r.Header.Get("Origin"); origin != "" {
-			w.Header().Set("Access-Control-Allow-Origin", origin)
-			if r.Method == "OPTIONS" && r.Header.Get("Access-Control-Request-Method") != "" {
-				preflightHandler(w, r)
-				return
-			}
-		}
-		h.ServeHTTP(w, r)
-	})
-}
+//func allowCORS(h http.Handler) http.Handler {
+//	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+//		if origin := r.Header.Get("Origin"); origin != "" {
+//			w.Header().Set("Access-Control-Allow-Origin", origin)
+//			if r.Method == "OPTIONS" && r.Header.Get("Access-Control-Request-Method") != "" {
+//				preflightHandler(w, r)
+//				return
+//			}
+//		}
+//		h.ServeHTTP(w, r)
+//	})
+//}
 
-func preflightHandler(w http.ResponseWriter, r *http.Request) {
-	headers := []string{"Content-Type", "Accept"}
-	w.Header().Set("Access-Control-Allow-Headers", strings.Join(headers, ","))
-	methods := []string{"GET", "HEAD", "POST", "PUT", "DELETE"}
-	w.Header().Set("Access-Control-Allow-Methods", strings.Join(methods, ","))
-	//glog.Infof("preflight request for %s", r.URL.Path)
-	fmt.Println("preflight request for %s", r.URL.Path)
-	return
-}
+//func preflightHandler(w http.ResponseWriter, r *http.Request) {
+//	headers := []string{"Content-Type", "Accept"}
+//	w.Header().Set("Access-Control-Allow-Headers", strings.Join(headers, ","))
+//	methods := []string{"GET", "HEAD", "POST", "PUT", "DELETE"}
+//	w.Header().Set("Access-Control-Allow-Methods", strings.Join(methods, ","))
+//	//glog.Infof("preflight request for %s", r.URL.Path)
+//	fmt.Println("preflight request for %s", r.URL.Path)
+//	return
+//}
 
 

@@ -27,7 +27,7 @@
 * https://docs.bazel.build/versions/main/install-os-x.html (brew install bazel)
 * follow below steps to install postgres and kafka
   - helm repo add bitnami https://charts.bitnami.com/bitnami
-  - helm install db --set postgresqlPassword=secretpassword,postgresqlDatabase=event_db bitnami/postgresql
+  - helm install messaging bitnami/kafka --set autoCreateTopicsEnable=true,deleteTopicEnable=true
   - helm install db bitnami/postgresql --set postgresqlUsername=admin,postgresqlPassword=admin,postgresqlDatabase=event_db
 
     
