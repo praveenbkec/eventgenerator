@@ -44,15 +44,15 @@
    
 3. build event producer docker
     ``` 
-    bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 producer/src/eventproducer:latest
+    bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 producer:latest
     ```
 4. install producer helm chart
     ```
-    helm install eventproducer producer/deploy/helm-chart
+    helm install eventproducer producer/deploy/eventproducer
     ```
 3. build event consumer docker
     ```
-    bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 consumer/src/eventconsumer:latest
+    bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 consumer:latest
     ```   
 
 6. install consumer helm chart
@@ -82,6 +82,6 @@ Event : {"Name":"praveen","Dept":"IT","EmpID":"12345","Time":"2021-09-11 18:53:3
 ### COMMANDS
 
 1. bazel run //:gazelle
-2. bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 producer/src/eventproducer:latest
-3. docker run -it bazel/producer/src/eventproducer:latest
+2. bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 producer:latest
+3. docker run -it bazel/producer:latest
 4. helm install eventproducer producer/deploy/helm-chart

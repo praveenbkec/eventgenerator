@@ -1,0 +1,24 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@io_bazel_rules_docker//container:container.bzl", "container_image")
+load("@io_bazel_rules_docker//container:container.bzl", "container_push")
+
+container_image(
+    name = "latest",
+    base = "@alpine_linux_amd64//image",
+    entrypoint = ["/producer"],
+    files = [":producer"],
+)
+
+go_library(
+    name = "go_default_library",
+    srcs = ["main.go"],
+    importpath = "github.com/praveenbkec/eventgenerator/producer",
+    visibility = ["//visibility:private"],
+    deps = ["@com_github_segmentio_kafka_go//:go_default_library"],
+)
+
+go_binary(
+    name = "producer",
+    embed = [":go_default_library"],
+    visibility = ["//visibility:public"],
+)

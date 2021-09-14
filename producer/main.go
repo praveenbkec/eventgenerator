@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	produceEventsNew()
+	produceEvents()
 }
 
 const (
@@ -29,7 +29,7 @@ type Event struct {
 }
 
 
-func produceEventsNew() {
+func produceEvents() {
 	events := []Event{
 		{
 			Name:  "praveen",

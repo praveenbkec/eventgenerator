@@ -1,34 +1,18 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
-load("@io_bazel_rules_docker//container:container.bzl", "container_image")
-load("@io_bazel_rules_docker//container:container.bzl", "container_push")
 
 go_library(
     name = "go_default_library",
     srcs = [
         "event_listener.go",
-        "main.go",
+        "event_mgmt.go",
     ],
     importpath = "github.com/praveenbkec/eventgenerator/consumer/src/eventconsumer",
     visibility = ["//visibility:private"],
-    deps = [
-        "//consumer/proto:go_default_library",
-        "//consumer/src/rpc:go_default_library",
-        "@com_github_grpc_ecosystem_grpc_gateway//runtime:go_default_library",
-        "@com_github_lib_pq//:go_default_library",
-        "@com_github_segmentio_kafka_go//:go_default_library",
-        "@org_golang_google_grpc//:go_default_library",
-    ],
+    deps = ["@com_github_segmentio_kafka_go//:go_default_library"],
 )
 
 go_binary(
     name = "eventconsumer",
     embed = [":go_default_library"],
     visibility = ["//visibility:public"],
-)
-
-container_image(
-    name = "latest",
-    base = "@alpine_linux_amd64//image",
-    entrypoint = ["/eventconsumer"],
-    files = [":eventconsumer"],
 )
