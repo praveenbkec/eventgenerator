@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	pb "github.com/praveenbkec/eventgenerator/consumer/proto"
+	"github.com/praveenbkec/eventgenerator/consumer/src/eventconsumer"
 	"strings"
 
 	//"github.com/golang/glog"
@@ -32,10 +33,10 @@ func init() {
 }
 
 func main() {
-
 	fmt.Println("getEndpoint"+*getEndpoint)
-	//go ConsumeEvents()
+
 	RunGrpcGateway(serverAddress)
+	go eventconsumer.ConsumeEvents()
 }
 
 func RunGrpcGateway(address string, opts ...runtime.ServeMuxOption) error {
@@ -53,7 +54,7 @@ func RunGrpcGateway(address string, opts ...runtime.ServeMuxOption) error {
 	return http.ListenAndServe(address, allowCORS(mux))
 	//return http.ListenAndServe(address, mux)
 }
-
+//TODO Login interceptor example
 func newGateway(ctx context.Context, opts ...runtime.ServeMuxOption) (http.Handler, error) {
 	fmt.Println("********* Creating newGateway ************")
 	mux := runtime.NewServeMux(opts...)
@@ -73,6 +74,7 @@ func newGateway(ctx context.Context, opts ...runtime.ServeMuxOption) (http.Handl
 	return mux, nil
 }
 
+//TODO check whether required
 //allowCORS allows Cross Origin Resoruce Sharing from any origin.
 //Don't do this without consideration in production systems.
 func allowCORS(h http.Handler) http.Handler {

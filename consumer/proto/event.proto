@@ -21,14 +21,18 @@ service EventGeneratorSvc {
 
 message GetEventRequest{
   string EmpID = 1;
+}
+
+message Event{
+  string EmpID = 1;
   string Name = 2;
   string Dept = 3;
   string Time = 4;
-
 }
 
 message GetEventResponse {
-  string status = 1;
+  Event event  = 1;
+  string status = 2;
 }
 
 message ListEventRequest{
@@ -36,5 +40,5 @@ message ListEventRequest{
 }
 
 message ListEventResponse {
-  string status = 1;
+  repeated Event events = 1;
 }

@@ -33,10 +33,6 @@ var _ = utilities.NewDoubleArray
 var _ = descriptor.ForMessage
 var _ = metadata.Join
 
-var (
-	filter_EventGeneratorSvc_GetEvent_0 = &utilities.DoubleArray{Encoding: map[string]int{"EmpID": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
-)
-
 func request_EventGeneratorSvc_GetEvent_0(ctx context.Context, marshaler runtime.Marshaler, client EventGeneratorSvcClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetEventRequest
 	var metadata runtime.ServerMetadata
@@ -57,13 +53,6 @@ func request_EventGeneratorSvc_GetEvent_0(ctx context.Context, marshaler runtime
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "EmpID", err)
-	}
-
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_EventGeneratorSvc_GetEvent_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	msg, err := client.GetEvent(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -91,13 +80,6 @@ func local_request_EventGeneratorSvc_GetEvent_0(ctx context.Context, marshaler r
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "EmpID", err)
-	}
-
-	if err := req.ParseForm(); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
-	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_EventGeneratorSvc_GetEvent_0); err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
 	msg, err := server.GetEvent(ctx, &protoReq)
