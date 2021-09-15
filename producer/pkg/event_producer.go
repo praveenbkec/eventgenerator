@@ -19,7 +19,7 @@ const (
 
 
 func init() {
-	EmpDB["12345"] = &Event{EmpID: "12345", Name: "Praveen BK", Dept: "IT"}
+	EmpDB["12345"] = &Event{EmpID: "12345", Name: "Praveen", Dept: "IT"}
 	EmpDB["23456"] = &Event{EmpID: "23456", Name: "Vinaya", Dept: "Telecom"}
 	EmpDB["34567"] = &Event{EmpID: "34567", Name: "Adithya", Dept: "Cloud"}
 	EmpDB["45678"] = &Event{EmpID: "45678", Name: "Gireesh", Dept: "Platform"}

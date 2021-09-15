@@ -86,6 +86,14 @@ Event : {"Name":"praveen","Dept":"IT","EmpID":"12345","Time":"2021-09-11 18:53:3
 ```bigquery
 bazel build --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 consumer/proto:event_swagger
 ```
+10. Access application from localhost run follwoing commands
+```bigquery
+  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=eventconsumer,app.kubernetes.io/instance=eventconsumer" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+  echo "Visit http://127.0.0.1:8080 to use your application"
+```
+
 10. Run Benchmark tests
 ```bigquery
 bazel run bechmark:go_default_test -- -test.bench=.

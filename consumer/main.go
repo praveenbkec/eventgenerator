@@ -4,12 +4,11 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	pb "github.com/praveenbkec/eventgenerator/consumer/proto"
-	"github.com/praveenbkec/eventgenerator/consumer/pkg/eventconsumer"
-	//"github.com/golang/glog"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	_ "github.com/lib/pq"
+	"github.com/praveenbkec/eventgenerator/consumer/pkg/eventconsumer"
 	"github.com/praveenbkec/eventgenerator/consumer/pkg/rpc"
+	pb "github.com/praveenbkec/eventgenerator/consumer/proto"
 	"google.golang.org/grpc"
 	"net/http"
 )
@@ -60,13 +59,11 @@ func newGateway(ctx context.Context, opts ...runtime.ServeMuxOption) (http.Handl
 	if err != nil {
 		return nil, err
 	}
-
 	fmt.Println("********* RegisterEventGeneratorSvcHandlerFromEndpoint post ************")
 	err = pb.RegisterEventGeneratorSvcHandlerFromEndpoint(ctx, mux, *postEndpoint, dialOpts)
 	if err != nil {
 		return nil, err
 	}
-
 	return mux, nil
 }
 

@@ -27,7 +27,7 @@ const (
 
 // Event = Name:XXXXX,Dept=OSS,EmplD:1234, Time=21-7-2021 21:00:10
 func produceEvents() {
-	events := []string{"12345", "23456", "34567", "45678"}
+	employess := []string{"12345", "23456", "34567", "45678"}
 	fmt.Println("********** inside producer ******** ")
 	w := kafka.Writer{
 		Addr:     kafka.TCP(brokerAddress),
@@ -35,14 +35,15 @@ func produceEvents() {
 		Balancer: &kafka.LeastBytes{},
 	}
 
-	i := 3
-	for i>=0 {
+	j:=0
+	for _ = range time.NewTicker(30 * time.Second).C {
 		empEventProducer := &pkg.EmployeeAccessEvent{
 			EventType: pkg.EmployeeAccessEventConst,
-			EmpID:     events[i],
+			EmpID:     employess[j],
 		}
 		event, _ := empEventProducer.ProduceEvent()
-		fmt.Printf("creating event %s\n", i)
+		log.Printf("============= Creating event ============= %v\n", j)
+		if j == 3 { j=0 } else { j++ }
 		fmt.Println(event)
 		eventJson, errMarshall := json.Marshal(event)
 		if errMarshall != nil {
@@ -56,14 +57,6 @@ func produceEvents() {
 		)
 		if err != nil {
 			log.Fatal("failed to write messages:", err)
-		}
-		fmt.Printf("creating complete %s\n", i)
-		time.Sleep(30 * time.Second)
-		if i ==0 {
-			fmt.Println("************** Repeating count ****************")
-			i = 3
-		} else {
-			i--
 		}
 	}
 	if err := w.Close(); err != nil {
