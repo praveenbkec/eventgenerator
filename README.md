@@ -1,6 +1,6 @@
 # EVENT GENERATOR
 
-### Implement Event generator Service using microservice architecture and deploy minikube environment using docker and kubernetes tools
+### Problem : Implement Event generator Service using microservice architecture and deploy minikube environment using docker and kubernetes tools
 
 1. One service produces kafka events in constant interval say every 30 seconds
 2. Events can be employee swiping the card to gain access or train ticket punching. Example: Event = Name:XXXXX,Dept=OSS,EmplD:1234, Time=21-7-2021 21:00:10
@@ -18,6 +18,7 @@
 * Docker-compose tests
   The code should be compiled and deployable in minikube
 
+### Solution: This solution is implemented using following tech stack
 ### PREREQUISITES  
 * docker, minikube, bazel, go, kafka, postgres/patroni
 
@@ -63,17 +64,19 @@
 7. check all running pods
 ```
 kmpraveen@kmpraveen-mbp eventgenerator % kubectl get po
-NAME                                        READY   STATUS    RESTARTS       AGE
-eventconsumer-6c576874-c8kvp                1/1     Running   0              15m
-eventproducer-helm-chart-5664f7f6fd-qss8b   1/1     Running   5 (3m7s ago)   14m
-messaging-kafka-0                           1/1     Running   2 (18m ago)    19m
-messaging-kafka-client                      1/1     Running   0              5h40m
-messaging-zookeeper-0                       1/1     Running   0              19m
+
+NAME                             READY   STATUS    RESTARTS      AGE
+db-postgresql-0                  1/1     Running   0             14h
+eventconsumer-69bbd4c6df-kb48r   1/1     Running   0             28m
+eventproducer-5f8df5c4fb-gmjwl   1/1     Running   0             13h
+messaging-kafka-0                1/1     Running   2 (15h ago)   15h
+messaging-kafka-client           1/1     Running   0             3d20h
+messaging-zookeeper-0            1/1     Running   0             15h
 ```
 
 8. check logs of a pod
 ```
-kmpraveen@kmpraveen-mbp eventgenerator % kubectl logs -f eventconsumer-6c576874-c8kvp 
+kmpraveen@kmpraveen-mbp eventgenerator % kubectl logs -f eventconsumer-69bbd4c6df-kb48r 
 ===================================== Event received ==========================================
 Event : {"Name":"praveen","Dept":"IT","EmpID":"12345","Time":"2021-09-11 18:53:30.0136598 +0000 UTC m=+1.003192301"}
 ```
