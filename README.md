@@ -40,6 +40,7 @@
    ```
 2. run below bazel command to resolve depenedencies
     ```
+    cd eventgenerator
     bazel run //:gazelle
     ```
    

@@ -14,7 +14,10 @@ go_library(
     srcs = ["main.go"],
     importpath = "github.com/praveenbkec/eventgenerator/producer",
     visibility = ["//visibility:private"],
-    deps = ["@com_github_segmentio_kafka_go//:go_default_library"],
+    deps = [
+        "//producer/pkg:go_default_library",
+        "@com_github_segmentio_kafka_go//:go_default_library",
+    ],
 )
 
 go_binary(

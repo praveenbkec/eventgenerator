@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/praveenbkec/eventgenerator/producer/pkg"
 	"github.com/segmentio/kafka-go"
 	"log"
 	"time"
@@ -25,39 +26,8 @@ const (
 )
 
 // Event = Name:XXXXX,Dept=OSS,EmplD:1234, Time=21-7-2021 21:00:10
-
-type Event struct {
-	Name string
-	Dept string
-	EmpID string
-	Time string
-}
-
-
 func produceEvents() {
-
-	events := []Event{
-		{
-			Name:  "praveen",
-			Dept:  "IT",
-			EmpID: "12345",
-		},
-		{
-			Name:  "rajesh",
-			Dept:  "TEST",
-			EmpID: "23456",
-		},
-		{
-			Name:  "suresh",
-			Dept:  "TEST",
-			EmpID: "34567",
-		},
-		{
-			Name:  "vinaya",
-			Dept:  "IT",
-			EmpID: "45678",
-		},
-	}
+	events := []string{"12345", "23456", "34567", "45678"}
 	fmt.Println("********** inside producer ******** ")
 	w := kafka.Writer{
 		Addr:     kafka.TCP(brokerAddress),
@@ -67,8 +37,11 @@ func produceEvents() {
 
 	i := 3
 	for i>=0 {
-		event := events[i]
-		event.Time = time.Now().Format(time.RFC850)
+		empEventProducer := &pkg.EmployeeAccessEvent{
+			EventType: pkg.EmployeeAccessEventConst,
+			EmpID:     events[i],
+		}
+		event, _ := empEventProducer.ProduceEvent()
 		fmt.Printf("creating event %s\n", i)
 		fmt.Println(event)
 		eventJson, errMarshall := json.Marshal(event)
