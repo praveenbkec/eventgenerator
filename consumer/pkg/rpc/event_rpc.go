@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	pb "github.com/praveenbkec/eventgenerator/consumer/proto"
-	"github.com/praveenbkec/eventgenerator/consumer/src/eventconsumer"
+	"github.com/praveenbkec/eventgenerator/consumer/pkg/eventconsumer"
 	"google.golang.org/grpc"
 	"log"
 	"net"

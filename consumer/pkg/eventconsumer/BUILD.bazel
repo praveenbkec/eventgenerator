@@ -6,7 +6,7 @@ go_library(
         "event_listener.go",
         "event_mgmt.go",
     ],
-    importpath = "github.com/praveenbkec/eventgenerator/consumer/src/eventconsumer",
+    importpath = "github.com/praveenbkec/eventgenerator/consumer/pkg/eventconsumer",
     visibility = ["//visibility:public"],
     deps = [
         "@com_github_lib_pq//:go_default_library",

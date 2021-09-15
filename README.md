@@ -1,6 +1,6 @@
 # EVENT GENERATOR
 
-### Problem : Implement Event generator Service using microservice architecture and deploy minikube environment using docker and kubernetes tools
+### Problem: Implement Event generator Service using microservice architecture and deploy minikube environment using docker and kubernetes tools
 
 1. One service produces kafka events in constant interval say every 30 seconds
 2. Events can be employee swiping the card to gain access or train ticket punching. Example: Event = Name:XXXXX,Dept=OSS,EmplD:1234, Time=21-7-2021 21:00:10
@@ -33,7 +33,7 @@
 
     
     
-### steps to run
+### Steps to run
 1. git clone project using
     ```
     git clone https://github.com/praveenbkec/eventgenerator.git
@@ -95,3 +95,12 @@ bazel run bechmark:go_default_test -- -test.bench=.
 2. bazel run --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 producer:latest
 3. docker run -it bazel/producer:latest
 4. helm install eventproducer producer/deploy/helm-chart
+
+### NOTE:
+1. generated protobuf files from bazel-bin folder copied/linked to proto folder, required only if you want to change proto.
+2. swagger json will be generated will present on bazel-bin folder to be copied and view in swagger-editor here https://editor.swagger.io/
+3. while running services on minikube to access httpserver or gRPC server on eventconsumer service need expose port using below command
+```bigquery
+kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+```
+  

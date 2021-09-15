@@ -8,9 +8,9 @@ go_library(
     importpath = "github.com/praveenbkec/eventgenerator/consumer",
     visibility = ["//visibility:private"],
     deps = [
+        "//consumer/pkg/eventconsumer:go_default_library",
+        "//consumer/pkg/rpc:go_default_library",
         "//consumer/proto:proto_go_proto",
-        "//consumer/src/eventconsumer:go_default_library",
-        "//consumer/src/rpc:go_default_library",
         "@com_github_grpc_ecosystem_grpc_gateway//runtime:go_default_library",
         "@com_github_lib_pq//:go_default_library",
         "@org_golang_google_grpc//:go_default_library",

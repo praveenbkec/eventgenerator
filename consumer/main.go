@@ -5,11 +5,11 @@ import (
 	"flag"
 	"fmt"
 	pb "github.com/praveenbkec/eventgenerator/consumer/proto"
-	"github.com/praveenbkec/eventgenerator/consumer/src/eventconsumer"
+	"github.com/praveenbkec/eventgenerator/consumer/pkg/eventconsumer"
 	//"github.com/golang/glog"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	_ "github.com/lib/pq"
-	"github.com/praveenbkec/eventgenerator/consumer/src/rpc"
+	"github.com/praveenbkec/eventgenerator/consumer/pkg/rpc"
 	"google.golang.org/grpc"
 	"net/http"
 )

@@ -3,11 +3,11 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 go_library(
     name = "go_default_library",
     srcs = ["event_rpc.go"],
-    importpath = "github.com/praveenbkec/eventgenerator/consumer/src/rpc",
+    importpath = "github.com/praveenbkec/eventgenerator/consumer/pkg/rpc",
     visibility = ["//visibility:public"],
     deps = [
+        "//consumer/pkg/eventconsumer:go_default_library",
         "//consumer/proto:proto_go_proto",
-        "//consumer/src/eventconsumer:go_default_library",
         "@org_golang_google_grpc//:go_default_library",
     ],
 )
