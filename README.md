@@ -85,6 +85,7 @@ Event : {"Name":"praveen","Dept":"IT","EmpID":"12345","Time":"2021-09-11 18:53:3
 9. Generate Swagger/Open API json using commad
 ```bigquery
 bazel build --platforms=@io_bazel_rules_go//go/toolchain:linux_amd64 consumer/proto:event_swagger
+render html doc from path doc/eventgenerator.html
 ```
 10. Access application from localhost run follwoing commands
 ```bigquery
